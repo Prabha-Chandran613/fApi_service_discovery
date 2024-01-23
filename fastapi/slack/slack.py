@@ -1,3 +1,4 @@
+from bson import ObjectId
 from pymongo import MongoClient
 from fastapi import FastAPI, status, Depends
 from pydantic import BaseModel

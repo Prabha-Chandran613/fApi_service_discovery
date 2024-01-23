@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine  #The function from SQLAlchemy is used to create a database engine
-from sqlalchemy.ext.declarative import declarative_base #
-from sqlalchemy.orm import sessionmaker #Created using the sessionmaker function from SQLAlchemy's orm module.It configures the session to be used for database operations.
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:nandini@localhost/nandini'
+SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:admin@127.0.0.1/fastapi_db'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

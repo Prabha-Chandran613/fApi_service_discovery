@@ -1,3 +1,3 @@
 from fastapi.security import OAuth2PasswordBearer
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://localhost:8080/realms/djangorealm/protocol/openid-connect/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://0.0.0.0:8080/realms/fastApi_realm/protocol/openid-connect/token")

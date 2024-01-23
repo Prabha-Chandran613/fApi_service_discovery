@@ -16,7 +16,7 @@ import models
 from database import engine, Base
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://localhost:8080/realms/djangorealm/protocol/openid-connect/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://0.0.0.0:8080/realms/fastApi_realm/protocol/openid-connect/token")
 
 router = APIRouter(
     prefix='/posts',
@@ -31,7 +31,7 @@ def test_posts(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme
 
     return  post
 
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=List[schema.CreatePost])
+@router.post('/create', status_code=status.HTTP_201_CREATED, response_model=List[schema.CreatePost])
 def test_posts_sent(post_post:schema.CreatePost, db:Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
 
     new_post = models.Post(**post_post.dict())
