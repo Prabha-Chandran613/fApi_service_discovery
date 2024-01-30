@@ -2,7 +2,7 @@ from bson import ObjectId
 from pymongo import MongoClient
 from fastapi import FastAPI, status, Depends
 from pydantic import BaseModel
-from typing import List, Annotated
+from typing import List
 from .keycloak import oauth2_scheme
 from fastapi import APIRouter
 from .database import MSG_COLLECTION, DB

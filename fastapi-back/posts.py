@@ -1,4 +1,5 @@
 from typing import List
+
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
 from starlette import status
@@ -22,6 +23,8 @@ router = APIRouter(
     prefix='/posts',
     tags=['Posts']
 )
+
+
 
 @router.get('/', response_model=List[schema.CreatePost])
 def test_posts(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):

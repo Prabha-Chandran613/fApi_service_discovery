@@ -1,7 +1,8 @@
 from typing import Union
 from fastapi import FastAPI
+import httpx
 from pydantic import BaseModel
-from typing import Annotated
+
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 import requests
@@ -34,6 +35,21 @@ async def shutdown_event():
 app.add_event_handler("startup", startup_event)
 app.add_event_handler("shutdown", shutdown_event)
 
+
+
+
+# Endpoint to call Microservice 2 and get its URL
+@app.get("/")
+async def read_root():
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get("http://localhost:8001/get_microservice2_url")
+            response.raise_for_status()
+            data = response.json()
+            microservice2_url = data["microservice2_url"]
+        return {"message": f"Hello from Microservice 1! Microservice 2 URL: {microservice2_url}"}
+    except httpx.RequestError as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 # eureka_client.init(eureka_server="http://localhost:8761/eureka/apps", app_name="fastapi-post")
 
 

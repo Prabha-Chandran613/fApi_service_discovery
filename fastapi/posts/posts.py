@@ -9,7 +9,7 @@ from .database import get_db
 from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import Annotated
+
 from fastapi import Depends, FastAPI
 from .database import engine, Base
 from .keycloak import oauth2_scheme
@@ -21,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.get('/', response_model=List[schema.CreatePost])
+@router.get('/getall', response_model=List[schema.CreatePost])
 def test_posts(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
 
     post = db.query(models.Post).all()
