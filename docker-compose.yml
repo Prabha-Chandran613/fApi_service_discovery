@@ -1,28 +1,59 @@
 version: '3.8'
 
 services:
-  fastapi-microservice:
-    image: fastapi-back:latest
-    ports:
-      - "8000:8000"
-    depends_on:
-      - jhipster-registry
-
-  jhipster-registry:
+  eureka-server:
     image: jhipster/jhipster-registry:v7.4.0
-    volumes:
-      - ./central-server-config:/central-config
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,api-docs
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/localhost-config/
     ports:
       - "8761:8761"
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8761/management/health']
-      interval: 5s
-      timeout: 5s
-      retries: 20
+    networks:
+      - network-mservice
+    depends_on:
+      - postgres-db
+
+  microservice1:
+    image: microservice1:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - EUREKA_SERVER_URL=http://admin:admin@eureka-server:8761/eureka/
+      - DATABASE_URL=postgresql://pgadmin:root@172.20.0.2:5432/ms1_db
+      - DATABASE_USERNAME=pgadmin
+      - DATABASE_PASSWORD=root
+    networks:
+      - network-mservice
+    depends_on:
+      - eureka-server
+
+  microservice2:
+    image: microservice2:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - EUREKA_SERVER_URL=http://admin:admin@eureka-server:8761/eureka/
+      - DATABASE_URL=postgresql://pgadmin:root@172.20.0.2:5432/ms2_db
+      - DATABASE_USERNAME=pgadmin
+      - DATABASE_PASSWORD=root
+    networks:
+      - network-mservice
+    depends_on:
+      - eureka-server
+
+  postgres-db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=pgadmin
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ms1_db
+      - POSTGRES_DB=ms2_db
+    networks:
+      - network-mservice
+
+volumes:
+  postgres_data:
+
+networks:
+  network-mservice:

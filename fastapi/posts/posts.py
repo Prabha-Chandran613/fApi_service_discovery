@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from starlette import status
 from . import models
@@ -13,8 +14,13 @@ from pydantic import BaseModel
 from fastapi import Depends, FastAPI
 from .database import engine, Base
 from .keycloak import oauth2_scheme
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=os.getenv("tokenUrl"))
 router = APIRouter(
     prefix='/posts',
     tags=['Posts']
